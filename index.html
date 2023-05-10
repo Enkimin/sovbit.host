@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title>Sovbit.host Nostr Address</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
 	<style>
 		.container {
 			display: flex;
@@ -52,34 +53,51 @@
 <body>
     <body>
         <div class="container" style="display: flex; flex-direction: column; align-items: center;">
-            <h1 style="color: #fd8c1d; margin-top: 0;">Sovbit.host Free Nip-05</h1>
+            <h1 style="color: #fd8c1d; margin-top: 0;">Sovbit.host free nostr address</h1>
             <form id="myForm" method="post" action="/.well-known/store_data.php" style="color: #f9e5e5; background-color: #1a1919; box-shadow: 1px 1px 5px 2px #000000;">
-                <label for="username">Username:</label>
+                <label for="username">Desired Username :</label>
                 <input type="text" name="username" id="username">
-                <label for="public_key">Public Key:</label>
-                <input type="text" name="public_key" id="public_key">
+                <label for="public_key">Hex Public Key :</label>
+                <input type="text" name="public_key" id="public_key" pattern="[0-9a-f]{64}" required>
                 <button type="submit">Submit</button>
             </form>
         </div>
-	<script>
-		document.getElementById("myForm").onsubmit = function(event) {
-			event.preventDefault();
-			
-			var xhr = new XMLHttpRequest();
-			xhr.open("POST", "store_data.php");
-			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-			xhr.onreadystatechange = function() {
-				if (xhr.readyState === 4 && xhr.status === 200) {
-					console.log(xhr.responseText);
-				}
-			};
-			
-			var formData = new FormData();
-			formData.append("username", document.getElementById("username").value);
-			formData.append("public_key", document.getElementById("public_key").value);
-			
-			xhr.send(formData);
-		};
-	</script>
+        <div id="successMessage" style="display: none; color: green;">
+            <p>You can now use <span id="nostr-address"></span> as your nostr address.</p>
+        </div>
+    </body>
+    <script>
+        document.getElementById("myForm").onsubmit = function(event) {
+            event.preventDefault();
+            var input = document.getElementById("public_key").value;
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "/.well-known/nostr.json");
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    var data = JSON.parse(xhr.responseText);
+                    if (data.hasOwnProperty(input)) {
+                        alert("The public key you entered already exists!");
+                    } else {
+                        var xhr2 = new XMLHttpRequest();
+                        xhr2.open("POST", "store_data.php");
+                        xhr2.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                        xhr2.onreadystatechange = function() {
+                            if (xhr2.readyState === 4 && xhr2.status === 200) {
+                                console.log(xhr2.responseText);
+                                document.getElementById("myForm").style.display = "none";
+                                document.getElementById("nostr-address").innerHTML = document.getElementById("username").value + "@sovbit.host";
+                                document.getElementById("successMessage").style.display = "block";
+                            }
+                        };
+                        var formData = new FormData();
+                        formData.append("username", document.getElementById("username").value);
+                        formData.append("public_key", document.getElementById("public_key").value);
+                        xhr2.send(formData);
+                    }
+                }
+            };
+            xhr.send();
+        };
+    </script>
 </body>
 </html>
