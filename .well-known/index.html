@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Form</title>
+</head>
+<body>
+  <form id="myForm" method="post" action="/.well-known/store_data.php">
+    <label for="username">Username:</label>
+    <input type="text" name="username" id="username">
+    <br>
+    <label for="public_key">Public Key:</label>
+    <input type="text" name="public_key" id="public_key">
+    <br>
+    <button type="submit">Submit</button>
+  </form>
+  
+  <script>
+    document.getElementById("myForm").onsubmit = function(event) {
+      event.preventDefault();
+      
+      var xhr = new XMLHttpRequest();
+      xhr.open("POST", "store_data.php");
+      xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          console.log(xhr.responseText);
+        }
+      };
+      
+      var formData = new FormData();
+      formData.append("username", document.getElementById("username").value);
+      formData.append("public_key", document.getElementById("public_key").value);
+      
+      xhr.send(formData);
+    };
+  </script>
+</body>
+</html>
