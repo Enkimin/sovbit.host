@@ -1,0 +1,10 @@
+{
+    "names": {
+      "Enki": "44dc1c2db9c3fbd7bee9257eceb52be3cf8c40baf7b63f46e56b58a131c74f0b",
+      "BitcoinAlien": "475e079e135a083aabb6ab6c9e71bd05f038c6613df174f9c77cd45e97edd8b7"
+    },
+    "relays": {
+        "44dc1c2db9c3fbd7bee9257eceb52be3cf8c40baf7b63f46e56b58a131c74f0b" : ["wss://nostr.sovbit.host"],
+        "475e079e135a083aabb6ab6c9e71bd05f038c6613df174f9c77cd45e97edd8b7" : ["wss://nostr.sovbit.host"]
+    }
+  }
