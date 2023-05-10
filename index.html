@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>My Form</title>
+        <style>.container { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #2a2a2a; box-shadow: 2px -2px 64px -9px #000000; text-shadow: 2px 2px 7px #000000; padding: 20px; } form { display: flex; flex-direction: column; align-items: center; background-color: #ffffff; padding: 20px; border-radius: 10px; } label { margin-bottom: 10px; color: #ffffff; font-size: 25px; line-height: 40px; } input { margin-bottom: 20px; padding: 10px; font-size: 25px; border: none; border-radius: 5px; } button { padding: 10px 20px; font-size: 25px; border: none; border-radius: 5px; background-color: #2a2a2a; color: #ffffff; cursor: pointer; }</style>
+    </head>
+    <body>
+        <div class="container" style="display: flex; flex-direction: column; align-items: center;">
+            <h1 style="color: #fd8c1d; margin-top: 0;">Sovbit.host Free Nip-05</h1>
+            <form id="myForm" method="post" action="/.well-known/store_data.php" style="color: #f9e5e5; background-color: #1a1919; box-shadow: 1px 1px 5px 2px #000000;">
+                <label for="username">Username:</label>
+                <input type="text" name="username" id="username">
+                <label for="public_key">Public Key:</label>
+                <input type="text" name="public_key" id="public_key">
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <script>
+		document.getElementById("myForm").onsubmit = function(event) {
+			event.preventDefault();
+			
+			var xhr = new XMLHttpRequest();
+			xhr.open("POST", "store_data.php");
+			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+			xhr.onreadystatechange = function() {
+				if (xhr.readyState === 4 && xhr.status === 200) {
+					console.log(xhr.responseText);
+				}
+			};
+			
+			var formData = new FormData();
+			formData.append("username", document.getElementById("username").value);
+			formData.append("public_key", document.getElementById("public_key").value);
+			
+			xhr.send(formData);
+		};
+	</script>
+    </body>
+</html>
